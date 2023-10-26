@@ -6,39 +6,3 @@ lvim.format_on_save.enabled = true
 
 lvim.colorscheme="tokyonight"
 vim.g.tokyonight_style="storm"
-
-require("project_nvim").setup {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-    }
-
--- lua
-require("nvim-tree").setup({
-  sync_root_with_cwd = true,
-  respect_buf_cwd = true,
-  update_focused_file = {
-    enable = true,
-    update_root = true
-  },
-})
-
-
-lvim.plugins={
-  {"folke/tokyonight.nvim"},
-  {"ahmedkhalf/project.nvim"},
-  {"kyazdani42/nvim-tree.lua"},
-  {"nvim-telescope/telescope.nvim"},
-  {"phaazon/hop.nvim"},
-  {"wfxr/minimap.vim"},
-  {"windwp/nvim-spectre"},
-  {"andymass/vim-matchup"},
-  {"sindrets/diffview.nvim"},
-  {"f-person/git-blame.nvim"},
-  {"pwntester/octo.nvim"},
-  {"mattn/vim-gist"},
-  {"Pocco81/auto-save.nvim"},
-  {"karb94/neoscroll.nvim"},
-  {"folke/todo-comments.nvim"},
-  {"wakatime/vim-wakatime"},
-  {"turbio/bracey.vim"},
-}
