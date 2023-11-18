@@ -1,1 +1,2 @@
-config/spotify-tui/.spotify_token_cache.json
+.spotify_token_cache.json
+.DS_Store
