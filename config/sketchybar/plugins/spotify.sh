@@ -69,9 +69,10 @@ update ()
            --set spotify.repeat icon.highlight=$REPEAT
            --set spotify.cover background.image="/tmp/cover.jpg"
                                background.color=0x00000000
-           --set spotify.anchor drawing=on                      )
+           --set spotify.anchor drawing=off                     )
+           # turn spotify.anchor drawing=off back on to show the top spotify control icon
   else
-    args+=(--set spotify.anchor drawing=on popup.drawing=off
+    args+=(--set spotify.anchor drawing=off popup.drawing=off
            --set spotify.play icon=􀊄                         )
   fi
   sketchybar -m "${args[@]}"

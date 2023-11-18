@@ -31,6 +31,8 @@ yabai -m mouse_drop_action swap
 # Disable specifc apps
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Betternet VPN$" manage=off
+yabai -m rule --add app="^Riot Client$" manage=off
+yabai -m rule --add app="^League of Legends$" manage=off
 
 # Window opacity
 yabai -m config window_opacity on
