@@ -18,10 +18,10 @@ window_state() {
       "false")
         if [ "$(echo "$WINDOW" | jq '.["has-fullscreen-zoom"]')" = "true" ]; then
           ICON=$YABAI_FULLSCREEN_ZOOM
-          COLOR=$GREEN
+          COLOR=$BAR_BORDER_COLOR
         elif [ "$(echo "$WINDOW" | jq '.["has-parent-zoom"]')" = "true" ]; then
           ICON=$YABAI_PARENT_ZOOM
-          COLOR=$BLUE
+          COLOR=$BAR_BORDER_COLOR
         else
           ICON=$YABAI_GRID
           COLOR=$BAR_BORDER_COLOR
@@ -29,7 +29,7 @@ window_state() {
         ;;
       "true")
         ICON=$YABAI_FLOAT
-        COLOR=$MAGENTA
+        COLOR=$BAR_BORDER_COLOR
         ;;
     esac
     args+=(--animate sin 10 --bar border_color=$COLOR)

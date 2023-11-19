@@ -13,7 +13,7 @@ volume_change() {
     ;;
     [1-9]) ICON=$VOLUME_10
     ;;
-    0) ICON=$VOLUME_0
+    0) ICON=$VOLUME_0; COLOR=$GREY
     ;;
     *) ICON=$VOLUME_100
   esac

@@ -20,7 +20,7 @@ do
     padding_right=2
     label.padding_right=20
     icon.color=$WHITE
-    icon.highlight_color=$RED
+    icon.highlight_color=$GREEN
     label.color=$GREY
     label.highlight_color=$WHITE
     label.font="sketchybar-app-font:Regular:16.0"

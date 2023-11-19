@@ -1,9 +1,9 @@
 # Keyboard shortcuts
 # Changing window focus yabai
-alt - i : yabai -m window --focus north
+alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east
-alt - k : yabai -m window --focus south
-alt - j : yabai -m window --focus west
+alt - j : yabai -m window --focus south
+alt - h : yabai -m window --focus west
 
 # Modify the layout
 
@@ -27,21 +27,31 @@ shift + alt - z : yabai -m window --toggle zoom-fullscreen
 shift + alt - f : yabai -m window --toggle native-fullscreen
 
 # balance out tree of windows so they occupy the same size
-shift + alt - e : yabai -m space --balance
+shift + lctrl - e : yabai -m space --balance
+
+# Resize windows
+shift + lctrl - h : yabai -m window --resize left:-50:0; \
+                  yabai -m window --resize right:-50:0
+shift + lctrl - j : yabai -m window --resize bottom:0:50; \
+                  yabai -m window --resize top:0:50
+shift + lctrl - k : yabai -m window --resize top:0:-50; \
+                  yabai -m window --resize bottom:0:-50
+shift + lctrl - l : yabai -m window --resize right:50:0; \
+                  yabai -m window --resize left:50:0
 
 # Moving windows around
 
 # swap windows 
-shift + alt - i : yabai -m window --swap north
+shift + alt - k : yabai -m window --swap north
 shift + alt - l : yabai -m window --swap east
-shift + alt - k : yabai -m window --swap south
-shift + alt - j : yabai -m window --swap west
+shift + alt - j : yabai -m window --swap south
+shift + alt - h : yabai -m window --swap west
 
 # move and split window
-ctrl + alt - i : yabai -m window --warp north
+ctrl + alt - k : yabai -m window --warp north
 ctrl + alt - l : yabai -m window --warp east
-ctrl + alt - k : yabai -m window --warp south
-ctrl + alt - j : yabai -m window --warp west
+ctrl + alt - j : yabai -m window --warp south
+ctrl + alt - h : yabai -m window --warp west
 
 # move window to display left and right
 shift + alt - s : yabai -m window --display west; yabai -m display --focus west;

@@ -10,9 +10,9 @@ cpu_top=(
 )
 
 cpu_percent=(
-  label.font="$FONT:Heavy:12"
+  label.font="$FONT:Heavy:14" # original font size is Heavy:12
   label=CPU
-  y_offset=-4
+  y_offset=-1 #original offset is -4
   padding_right=15
   width=55
   icon.drawing=off
@@ -40,6 +40,10 @@ cpu_user=(
   background.color=$TRANSPARENT
 )
 
+sketchybar --add item cpu.percent right          \
+           --set cpu.percent "${cpu_percent[@]}" \
+
+<<original
 sketchybar --add item cpu.top right              \
            --set cpu.top "${cpu_top[@]}"         \
                                                  \
@@ -51,3 +55,4 @@ sketchybar --add item cpu.top right              \
                                                  \
            --add graph cpu.user right 75         \
            --set cpu.user "${cpu_user[@]}"
+original
