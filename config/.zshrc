@@ -1,5 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -111,3 +113,6 @@ alias spt="spt --tick-rate 50"
 alias balls=lazygit
 
 neofetch
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+

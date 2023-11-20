@@ -22,8 +22,8 @@ launchctl unload -F /System/Library/LaunchAgents/com.apple.OSDUIHelper.plist > /
 bar=(
   height=40
   color=$0xffffffff # orignal is $BAR_COLOR
-  border_width=2
-  border_color=$0xffffffff # original is $BAR_BORDER_COLOR or smth like that
+  border_width=2 #2 
+  border_color=$BAR_BORDER_COLOR
   shadow=off
   position=top
   sticky=on
@@ -32,6 +32,9 @@ bar=(
   corner_radius=8
   y_offset=1
   margin=5
+
+  corner_radius=50
+  blur_radius=0
 )
 
 sketchybar --bar "${bar[@]}"
@@ -72,7 +75,6 @@ source "$ITEM_DIR/spotify.sh"
 
 # Right
 source "$ITEM_DIR/calendar.sh"
-source "$ITEM_DIR/terminal.sh"
 source "$ITEM_DIR/brew.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"

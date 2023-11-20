@@ -17,7 +17,7 @@ yabai=(
 front_app=(
   script="$FRONT_APP_SCRIPT"
   icon.drawing=off
-  label.color=$GREEN
+  label.color=$WHITE
   label.font="$FONT:Black:12.0"
   associated_display=active
 )

@@ -44,8 +44,10 @@ spaces_bracket=(
 )
 
 separator=(
-  icon=􀆊
-  icon.font="$FONT:Heavy:16.0"
+  icon=⋲
+  # og icon: 􀆊
+  icon.font="$FONT:ExtraBold:20.0" # Heavy:16.0
+  icon.y_offset=0.5
   padding_left=10
   padding_right=8
   label.drawing=off
