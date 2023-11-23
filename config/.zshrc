@@ -105,7 +105,7 @@ export PATH=$PATH:~/.local/bin/
 
 alias penis=nvim
 
-#export EDITOR='lvim'
+export EDITOR='lvim'
 
 alias spt="spt --tick-rate 50"
 
