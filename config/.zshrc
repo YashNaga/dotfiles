@@ -103,10 +103,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH=$PATH:~/.local/bin/
 
-alias nvim=lvim
 alias penis=nvim
 
-export EDITOR='lvim'
+#export EDITOR='lvim'
 
 alias spt="spt --tick-rate 50"
 
