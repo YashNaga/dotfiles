@@ -1,0 +1,84 @@
+#yabai --start-service
+#Keyboard shortcuts
+# Changing window focus yabai
+lalt - k : yabai -m window --focus north
+lalt - l : yabai -m window --focus east
+lalt - j : yabai -m window --focus south
+lalt - h : yabai -m window --focus west
+
+# Modify the layout
+
+# Rotate the whole layout clockwise
+lshift + lalt - r : yabai -m space --rotate 270
+
+# Flip along y-axis
+lshift + lalt - y : yabai -m space --mirror y-axis
+
+# Flip along the x-axis
+lshift + lalt - x : yabai -m space --mirror x-axis
+
+# toggle window float
+lshift + lalt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
+
+# Open kitty
+cmd - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
+
+# Modify window size
+
+# maximise a window
+lshift + lalt - z : yabai -m window --toggle zoom-fullscreen
+lshift + lalt - f : yabai -m window --toggle native-fullscreen
+
+# balance out tree of windows so they occupy the same size
+lshift + lctrl - e : yabai -m space --balance
+
+# Resize windows
+lshift + lctrl - h : yabai -m window --resize left:-50:0; \
+                  yabai -m window --resize right:-50:0
+lshift + lctrl - j : yabai -m window --resize bottom:0:50; \
+                  yabai -m window --resize top:0:50
+lshift + lctrl - k : yabai -m window --resize top:0:-50; \
+                  yabai -m window --resize bottom:0:-50
+lshift + lctrl - l : yabai -m window --resize right:50:0; \
+                  yabai -m window --resize left:50:0
+
+# Moving windows around
+
+# swap windows 
+lshift + lalt - k : yabai -m window --swap north
+lshift + lalt - l : yabai -m window --swap east
+lshift + lalt - j : yabai -m window --swap south
+lshift + lalt - h : yabai -m window --swap west
+
+# move and split window
+lctrl + lalt - k : yabai -m window --warp north
+lctrl + lalt - l : yabai -m window --warp east
+lctrl + lalt - j : yabai -m window --warp south
+lctrl + lalt - h : yabai -m window --warp west
+
+# move window to display left and right
+# shift + alt - s : yabai -m window --display west; yabai -m display --focus west
+# shift + alt - g : yabai -m window --display east; yabai -m display --focus east
+
+# Move focus container to workspace
+lshift + lalt - m : yabai -m window --space last; yabai -m space --focus last
+lshift + lalt - p : yabai -m window --space prev; yabai -m space --focus prev
+lshift + lalt - n : yabai -m window --space next; yabai -m space --focus next
+lshift + lalt - 1 : yabai -m window --space 1; yabai -m space --focus 1
+lshift + lalt - 2 : yabai -m window --space 2; yabai -m space --focus 2
+lshift + lalt - 3 : yabai -m window --space 3; yabai -m space --focus 3
+lshift + lalt - 4 : yabai -m window --space 4; yabai -m space --focus 4
+lshift + lalt - 5 : yabai -m window --space 5; yabai -m space --focus 5
+lshift + lalt - 6 : yabai -m window --space 6; yabai -m space --focus 6
+lshift + lalt - 7 : yabai -m window --space 7; yabai -m space --focus 7
+lshift + lalt - 8 : yabai -m window --space 8; yabai -m space --focus 8
+lshift + lalt - 9 : yabai -m window --space 9; yabai -m space --focus 9
+
+lctrl + lalt - c : yabai -m space --create
+lctrl + lalt - d : yabai -m space --destroy
+
+# start / stop / restart yabai
+
+lctrl + lalt - y : yabai --start-service
+lctrl + lalt - n : yabai --stop-service
+lctrl + lalt - h : yabai --restart-service
