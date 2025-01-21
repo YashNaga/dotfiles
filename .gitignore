@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 spicetify
 stetic
 NuGet
 xbuild
 .DS_Store
 .mono
+=======
+/config/spotify-tui/.spotify_token_cache.json
+.DS_Store
+>>>>>>> e2267d90dbd28be79a1497d3a090dd8d3f40a04d

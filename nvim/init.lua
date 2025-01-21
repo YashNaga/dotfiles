@@ -29,8 +29,11 @@ end
 opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ 
-    {import = "plugins"}, 
+   -- {import = "plugins"}, 
     {import = "plugins.lsp"}, 
+    {import = "plugins.ui"},
+    {import = "plugins.util"},
+    {import = "plugins.qol"},
     checker = {
         enabled = true
     }, 
