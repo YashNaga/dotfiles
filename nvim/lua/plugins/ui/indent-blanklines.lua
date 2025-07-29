@@ -7,6 +7,7 @@ return {
   opts = {
       -- char = "▏",
       char = "│",
+      highlight = {"Function", "Label"},
       filetype_exclude = {
         "help",
         "alpha",
@@ -19,7 +20,9 @@ return {
         "toggleterm",
         "lazyterm",
       },
-      show_trailing_blankline_indent = false,
+      show_trailing_blankline_indent = true,
       show_current_context = false,
   },
 }
+
+

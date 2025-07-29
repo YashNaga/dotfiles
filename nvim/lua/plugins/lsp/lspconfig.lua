@@ -15,6 +15,27 @@ return {
 
         local keymap = vim.keymap
 
+
+        lspconfig.clangd.setup {
+            on_attach = on_attach,
+            cmd = {
+                "/opt/homebrew/opt/llvm/bin/clangd",
+                "--background-index",
+                "--pch-storage=memory",
+                "--all-scopes-completion",
+                "--pretty",
+                "--header-insertion=never",
+                "-j=4",
+                "--inlay-hints",
+                "--header-insertion-decorators",
+                "--function-arg-placeholders",
+                "--completion-style=detailed",
+                "--suggest-missing-includes=false"
+            },
+            filetypes = {"c", "cpp", "objc", "objcpp"},
+            capabilities = capabilities
+        }
+
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("UserLspConfig", {}),
             callback = function(ev)
@@ -65,11 +86,13 @@ return {
         })
 
         local capabilities = cmp_nvim_lsp.default_capabilities()
-
+        --[[
         mason_lspconfig.setup_handlers {
             function (server_name)
                 lspconfig[server_name].setup {}
             end,
         }
+        ]]
     end,
 }
+

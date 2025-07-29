@@ -7,12 +7,15 @@ return {
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-cmdline",
-		"saadparwaiz1/cmp_luasnip",
-		"L3MON4D3/LuaSnip",
-        "rafamadriz/friendly-snippets"
+        'L3MON4D3/LuaSnip',
+        'saadparwaiz1/cmp_luasnip',
+        "rafamadriz/friendly-snippets",
 	},
     config = function()
         local cmp = require("cmp")
+        local luasnip = require('luasnip')
+
+        require('luasnip.loaders.from_vscode').lazy_load()
 
         cmp.setup({
             completion = {
@@ -31,12 +34,13 @@ return {
             ["<C-e>"] = cmp.mapping.abort(), -- close completion window
             ["<CR>"] = cmp.mapping.confirm({ select = false }),
             }),
-            sources = cmp.config.sources({
-            { name = "nvim_lsp"},
-            { name = "luasnip" }, -- snippets
-            { name = "buffer" }, -- text within current buffer
-            { name = "path" }, -- file system paths
-            }),
+           
+           sources = cmp.config.sources({
+           { name = "nvim_lsp"},
+           { name = "luasnip" }, -- snippets
+           { name = "buffer" }, -- text within current buffer
+           { name = "path" }, -- file system paths
+           }),
         })
     end,
 }

@@ -28,11 +28,19 @@ yabai -m config mouse_action2 resize
 # right click and drag to resize
 yabai -m mouse_drop_action swap
 
-# Disable specifc apps
+# Disable specific apps
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Betternet VPN$" manage=off
 yabai -m rule --add app="^Godot$" manage=off
 yabai -m rule --add app="^RuneLite$" manage=off
+
+# Enable specific apps
+#sleep 0.2 && 
+yabai -m rule --add app="zathura" manage=on float=off 
+
+# Zathura specific command to focuz zathura pdf on open
+yabai -m signal --add app="zathura" event=window_created \
+    action="yabai -m window last --focus"
 
 # Window opacity
 yabai -m config window_opacity on
