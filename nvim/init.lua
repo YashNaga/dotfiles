@@ -53,7 +53,7 @@ require("lazy").setup({
             "rebelot/kanagawa.nvim",
             config = function()
                 require("kanagawa").setup({
-                    transparent = true,
+                    theme = "wave",
                     colors = {
                         theme = {
                             all = {
@@ -63,8 +63,26 @@ require("lazy").setup({
                             },
                         },
                     },
+                    overrides = function(colors)
+                        local theme = colors.theme
+                        return {
+                            NormalFloat = { bg = "none" },
+                            FloatBorder = { bg = "none" },
+                            FloatTitle = { bg = "none" },
+
+                            -- Save an hlgroup with dark background and dimmed foreground
+                            -- so that you can use it where your still want darker windows.
+                            -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+                            NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+
+                            -- Popular plugins that open floats will link to NormalFloat by default;
+                            -- set their background accordingly if you wish to keep them dark and borderless
+                            LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+                            MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+                        }
+                    end,
+
                 })
-                vim.cmd("colorscheme kanagawa-wave")
             end,
             build = function()
                 vim.cmd("KanagawaCompile")
@@ -133,18 +151,10 @@ require("lazy").setup({
         },
 
         -- For the smear cursor effect
-        {
-            "sphamba/smear-cursor.nvim",
-            opts = {},
-        },
+        { "sphamba/smear-cursor.nvim", opts = {}, },
 
         -- Git signs for like git n shi
-        {
-            "lewis6991/gitsigns.nvim",
-            config = function()
-                require('gitsigns').setup()
-            end,
-        },
+        { "lewis6991/gitsigns.nvim",   config = function() require('gitsigns').setup() end, },
 
         -- Markdown preview for my workflow (in the event you wanna switch check out 'brianhuster/live-preview')
         {
@@ -158,10 +168,6 @@ require("lazy").setup({
             config = function()
                 vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreview<cr>', { desc = 'Markdown preview toggle' })
             end,
-            -- init = function()
-            -- local g = vim.g
-            -- g.mkdp_auto_start = 1
-            -- end,
         },
 
         -- Vimtex for my mathematical workflow (its not really setup and i dont really know how to use it yet)
@@ -280,6 +286,23 @@ require("lazy").setup({
             end,
         },
 
+        {
+
+            "folke/flash.nvim",
+            event = "VeryLazy",
+            ---@type Flash.Config
+            opts = {},
+            -- stylua: ignore
+            keys = {
+                { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+                { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+                { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+                { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+                { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+            },
+
+        },
+
         -- So I remember my leader shortcuts
         {
             "folke/which-key.nvim",
@@ -289,8 +312,7 @@ require("lazy").setup({
                 vim.o.timeoutlen = 300
             end,
             opts = {
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
+                -- your configuration comes here or leave it empty to use the default settings
             }
         },
 
@@ -315,6 +337,7 @@ require("lazy").setup({
                 }
             end,
         },
+
 
         -- Edit directories in buffer
         {
@@ -386,7 +409,6 @@ require("lazy").setup({
         -- fzf lua replacement for telescope
         {
             "ibhagwan/fzf-lua",
-            -- optional for icon support
             dependencies = { "nvim-tree/nvim-web-devicons" },
             cmd = "FzfLua",
             opts = {
@@ -403,8 +425,6 @@ require("lazy").setup({
                 { "<leader>fk", "<cmd>FzfLua keymaps<cr>",      desc = "Keymaps" },
                 { "<leader>fs", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fuzzily search in current buffer" },
                 { "<leader>fo", "<cmd>FzfLua buffers<cr>",      desc = "Find opened buffers in current neovim instance" },
-
-
             },
         },
 
@@ -664,3 +684,5 @@ require("lazy").setup({
         checker = { enabled = true },
     }
 })
+
+vim.cmd("colorscheme kanagawa-wave")
