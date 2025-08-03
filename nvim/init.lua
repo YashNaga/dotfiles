@@ -8,6 +8,7 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.wrap = false
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.mouse = "a"
 vim.opt.smartcase = true
 vim.opt.ignorecase = true
@@ -48,7 +49,7 @@ require("lazy").setup({
         -- add your plugins here
         -- {"plugin", config = function() end}
 
-        -- Kanagawa theme (wave variant i think)
+        -- Kanagawa theme (wave variant)
         {
             "rebelot/kanagawa.nvim",
             config = function()
@@ -170,23 +171,13 @@ require("lazy").setup({
             end,
         },
 
-        -- Vimtex for my mathematical workflow (its not really setup and i dont really know how to use it yet)
+        -- Typst as latex replacement (If needed translate typst to latex with pandoc)
         {
-            "lervag/vimtex",
-            lazy = false, -- we don't want to lazy load VimTeX
-            -- tag = "v2.15", -- uncomment to pin to a specific release
-            init = function()
-                -- VimTeX configuration goes here, e.g.
-                vim.g.vimtex_viewer_method = "zathura --fork"
-                vim.g.vimtex_view_general_viewer = "zathura --fork"
-                vim.g.vimtex_viewer_automatic = 1
-                vim.g.vimtex_compiler_method = "latexmk"
-                vim.g.vimtex_view_zathura_options = '--synctex-forward %l:%c:%s %f'
-                vim.g.vimtex_compiler_latexmk = {
-                    aux_dir = "./.latexmk/aux",
-                    out_dir = "./.latexmk/out",
-                }
-            end
+            'chomosuke/typst-preview.nvim',
+            -- lazy = false, or
+            ft = 'typst',
+            version = '1.*',
+            opts = {}, -- lazy.nvim will implicitly calls `setup {}`
         },
 
         -- For my tmux workflow
@@ -298,7 +289,7 @@ require("lazy").setup({
                 { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
                 { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
                 { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-                { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+                { "<C-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
             },
 
         },
@@ -357,7 +348,6 @@ require("lazy").setup({
                     skip_confirm_for_simple_edits = true,
                     view_options = {
                         show_hidden = true,
-                        natural_order = true,
                     },
                     win_options = {
                         wrap = true,
@@ -418,13 +408,15 @@ require("lazy").setup({
                 fzf_colors = true,
             },
             keys = {
-                { "<leader>ff", "<cmd>FzfLua files<cr>",        desc = "Search files" },
-                { "<leader>fb", "<cmd>FzfLua resume<cr>",       desc = "Resume search" },
-                { "<leader>fg", "<cmd>FzfLua grep<cr>",         desc = "Search by grep" },
-                { "<leader>fl", "<cmd>FzfLua live_grep<cr>",    desc = "Search by live grep" },
-                { "<leader>fk", "<cmd>FzfLua keymaps<cr>",      desc = "Keymaps" },
-                { "<leader>fs", "<cmd>FzfLua lgrep_curbuf<cr>", desc = "Fuzzily search in current buffer" },
-                { "<leader>fo", "<cmd>FzfLua buffers<cr>",      desc = "Find opened buffers in current neovim instance" },
+                { "<leader>ff", "<cmd>FzfLua files<cr>",                 desc = "Search files" },
+                { "<leader>fr", "<cmd>FzfLua resume<cr>",                desc = "Resume search" },
+                { "<leader>fg", "<cmd>FzfLua grep<cr>",                  desc = "Search by grep" },
+                { "<leader>fl", "<cmd>FzfLua live_grep<cr>",             desc = "Search by live grep" },
+                { "<leader>fk", "<cmd>FzfLua keymaps<cr>",               desc = "Keymaps" },
+                { "<leader>fh", "<cmd>FzfLua lgrep_curbuf<cr>",          desc = "Fuzzily search in current buffer" },
+                { "<leader>fb", "<cmd>FzfLua buffers<cr>",               desc = "Find opened buffers in current neovim instance" },
+                { "<leader>fG", "<cmd>FzfLua grep_cword<cr>",            desc = "Grep word under cursor" },
+                { "<leader>fc", "<cmd>FzfLua files cwd='~/.config'<cr>", desc = "Open fuzzy find in config dir" }
             },
         },
 
@@ -537,8 +529,7 @@ require("lazy").setup({
                         "clangd",
                         "cmake",
                         "jdtls",
-                        "ltex",
-                        "ltex_plus"
+                        "tinymist"
                     },
 
                     automatic_installation = true,
@@ -550,7 +541,8 @@ require("lazy").setup({
                         "stylua",
                         "isort",
                         "clangd",
-                        "pylint"
+                        "pylint",
+                        "prettypst",
                     },
                 })
 

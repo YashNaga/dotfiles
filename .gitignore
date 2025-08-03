@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 spicetify
+jgit
+gh
 stetic
 NuGet
 xbuild
 .DS_Store
 .mono
+coc
 =======
 /config/spotify-tui/.spotify_token_cache.json
 .DS_Store
