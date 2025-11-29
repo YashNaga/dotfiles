@@ -23,3 +23,7 @@ set recolor "true"
 set recolor-keephue "true"
 
 include kanagawa
+
+# Run following command every time you install a new plugin
+# and also maybe everytime you update or it wont work
+# d=$(brew --prefix zathura)/lib/zathura ; mkdir -p $d ; for n in cb djvu pdf-mupdf pdf-poppler ps ; do p=$(brew --prefix zathura-$n)/lib$n.dylib ; [[ -f $p ]] && ln -s $p $d ; done

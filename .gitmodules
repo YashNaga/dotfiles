@@ -1,0 +1,6 @@
+[submodule "nvim/plugin-structure/external/nvim-lspconfig"]
+	path = nvim/plugin-structure/external/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
+[submodule "nvim/plugin-structure/external/mason-registry"]
+	path = nvim/plugin-structure/external/mason-registry
+	url = https://github.com/mason-org/mason-registry
