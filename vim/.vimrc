@@ -62,23 +62,16 @@ Plug 'liuchengxu/vim-which-key' " keep forgetting my keymaps (TODO setup whichke
 
 Plug 'airblade/vim-gitgutter' " gitsigns (git)
 
-Plug 'lambdalisue/vim-fern' " nvim tree for better overview of larger projects (TODO give same bindings as nvim-tree)
 Plug 'girishji/scope.vim' " fzf (TODO give same bindings as fzf-lua) 
 
-Plug 'justinmk/vim-sneak' " flash nvim alternative 
-
-Plug 'tmsvg/pear-tree' " autopair
 Plug 'tpope/vim-surround' " change the text your surrounded by
 Plug 'tpope/vim-commentary' " gives me back my gc and gcc from nvim
 
 Plug 'sheerun/vim-polyglot' " treesitter
 Plug 'girishji/vimsuggest' " autocomplete for vim cmdline
-Plug 'rafamadriz/friendly-snippets' " snippets
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " lsp, autocomplete, linting (snippets with :CocInstall coc-snippets) nodejs is a dependency (TODO setup everything)
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' } " for markdown specifically ( to complete installation :call mkdp#util#install() ) (TODO add mappings for whichkey)
-Plug 'kaarmu/typst.vim' " typst replacement for latex
 Plug 'christoomey/vim-tmux-navigator' " for tmux specifically (tmux side config needed)
 
 call plug#end()
