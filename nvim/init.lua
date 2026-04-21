@@ -20,6 +20,8 @@ vim.opt.incsearch = true
 vim.opt.autoread = true
 vim.opt.autochdir = false
 vim.opt.selection = "inclusive"
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 vim.opt.undofile = true
 vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undodir"
 
@@ -73,8 +75,10 @@ vim.keymap.set("n", "<C-Up>", ":ls<cr>", defaultOpts)
 
 vim.keymap.set("n", "<leader>bd", ":bd<cr>", { desc = "Delete current buffer", noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Create split vertically", silent = true })
-vim.keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Create split horizontally", silent = true })
+vim.keymap.set("n", "<leader>sh", "<C-w>s<C-w>H", { desc = "Create split to the left", silent = true })
+vim.keymap.set("n", "<leader>sj", "<C-w>s", { desc = "Create split below", silent = true })
+vim.keymap.set("n", "<leader>sk", "<C-w>s<C-w>K", { desc = "Create split above", silent = true })
+vim.keymap.set("n", "<leader>sl", "<C-w>v", { desc = "Create split to the right", silent = true })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", defaultOpts)
 vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv", defaultOpts)
@@ -84,7 +88,7 @@ vim.keymap.set("v", "<", "<gv", defaultOpts)
 
 vim.keymap.set("n", "-", "<cmd>Oil --float<cr>", { desc = "Opens Oil in floating window" })
 
-vim.keymap.set("n", "<leader>u", function()
+vim.keymap.set("n", "<leader>U", function()
 	require("undotree").open({
 		command = "belowright " .. math.floor(vim.api.nvim_win_get_width(0) / 3) .. "vnew", -- makes undotree take up a third of the screen
 	})
@@ -96,6 +100,8 @@ vim.keymap.set("n", "<leader>R", function()
 	vim.cmd("mksession! " .. vim.fn.fnameescape(session))
 	vim.cmd("restart source " .. vim.fn.fnameescape(session))
 end, { desc = "Restart Neovim" })
+
+vim.keymap.set("n", "<leader>H", "<cmd>help!<cr>", { desc = "Show help page for whats under cursor" })
 
 vim.keymap.set("n", "<leader>ff", "<cmd>FzfLua files<cr>", { desc = "Search files" })
 vim.keymap.set("n", "<leader>fr", "<cmd>FzfLua resume<cr>", { desc = "Resume search" })
@@ -122,7 +128,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- highlights yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
-		vim.highlight.on_yank({
+		vim.hl.on_yank({
 			higroup = "IncSearch",
 			timeout = 40,
 		})
@@ -163,7 +169,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- plugin wish list: multicursors natively in 0.13 please
 
-require("vim._core.ui2").enable({ enable = true }) -- if your ui is bugging comment this line out (g< enters the pager as a buffer)
+require("vim._core.ui2").enable({ enable = true }) -- if your ui is bugging comment this line out (g< enters the pager as a buffer) Will be default in 0.13
 vim.cmd("packadd nvim.undotree")
 vim.cmd("packadd nvim.difftool")
 vim.cmd("packadd nohlsearch")
@@ -534,7 +540,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end, opts) -- jump to next diagnostic in buffer
 
 		opts.desc = "Show documentation for what is under cursor"
-		vim.keymap.set("n", "D", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
+		vim.keymap.set("n", "D", vim.lsp.buf.hover, opts) -- Double press D to enter hover as buffer
 	end,
 })
 
