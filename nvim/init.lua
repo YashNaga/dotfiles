@@ -366,7 +366,7 @@ require("conform").setup({
 		clang_format = {
 			prepend_args = {
 				-- Acts as a global .clang-format file
-				"--style={BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Always, SpaceAfterControlStatementKeyword: false, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, IndentAccessModifiers: true, AccessModifierOffset: -1, ColumnLimit: 120}",
+				"--style={BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Always, SpaceAfterControlStatementKeyword: false, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, IndentAccessModifiers: true, AccessModifierOffset: -1, ColumnLimit: 120, PointerAlignment: Right, DerivePointerAlignment: false}",
 				"--Wno-error=unknown",
 			},
 		},
