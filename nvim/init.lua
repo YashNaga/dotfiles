@@ -62,10 +62,10 @@ vim.keymap.set("t", "<C-k>", "<C-\\><C-N><C-w>k", termOpts)
 vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
 vim.keymap.set("t", "<esc>", "<C-\\><C-n>", defaultOpts)
 
-vim.keymap.set("n", "<leader>th", ":vertical leftabove term<cr>i", { desc = "Create terminal to the left", silent = true })
-vim.keymap.set("n", "<leader>tj", ":below term<cr>i", { desc = "Create terminal below", silent = true })
-vim.keymap.set("n", "<leader>tk", ":leftabove term<cr>i", { desc = "Create terminal above", silent = true })
-vim.keymap.set("n", "<leader>tl", ":vertical belowright term<cr>i", { desc = "Create terminal to the right", silent = true })
+vim.keymap.set("n", "<leader>th", ":vertical leftabove term<cr>", { desc = "Create terminal to the left", silent = true })
+vim.keymap.set("n", "<leader>tj", ":below term<cr>", { desc = "Create terminal below", silent = true })
+vim.keymap.set("n", "<leader>tk", ":leftabove term<cr>", { desc = "Create terminal above", silent = true })
+vim.keymap.set("n", "<leader>tl", ":vertical belowright term<cr>", { desc = "Create terminal to the right", silent = true })
 
 -- Make sure to disable Mission control shortcuts in keyboard shortcuts on mac to make arrow keys work
 vim.keymap.set("n", "<C-Right>", ":bnext<cr>", defaultOpts)
@@ -162,6 +162,16 @@ vim.api.nvim_create_autocmd("FileType", {
 		-- Remap j/k to move by visual line instead of physical line
 		vim.keymap.set("n", "j", "gj", opts)
 		vim.keymap.set("n", "k", "gk", opts)
+	end,
+})
+
+-- Enter Insert Mode every time you enter a terminal, comment out if its too annoying
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "TermOpen" }, {
+	group = vim.api.nvim_create_augroup("terminal_insert", { clear = true }),
+	callback = function()
+		if vim.bo.buftype == "terminal" then
+			vim.cmd("startinsert")
+		end
 	end,
 })
 
