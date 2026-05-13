@@ -1,0 +1,59 @@
+
+{
+    "$schema": "github.com",
+    "logo": {
+		"source": "/Users/turdnugget/.config/fastfetch/ascii.txt",
+        "padding": {
+            "top": 1
+        },
+		"color": {
+			"1": "red",
+			"2": "yellow",
+			"3": "green",
+			"4": "blue",
+			"5": "magenta"
+		}
+    },
+    // "display": {
+    //     "showAllCpuFreq": false
+    // },
+    "modules": [
+        {
+            "type": "title",
+            "fqdn": false
+        },
+        "separator",
+        {
+            "type": "os",
+            "format": "{3} {12}" // Short distro name, hides architecture
+        },
+        {
+            "type": "kernel",
+            "format": "{1} {2}" // Matches kernel_shorthand="off" (e.g., "Linux 6.1.0")
+        },
+        {
+            "type": "uptime",
+            "format": "{1}d {2}h {3}m" // Matches uptime_shorthand="on" / "tiny" style
+        },
+        {
+            "type": "packages",
+            "countUnknown": true // Displays package manager names
+        },
+        {
+            "type": "shell",
+            "format": "{1} {4}" // Hides path, shows version
+        },
+        {
+            "type": "de",
+            "format": "{1} {2}" // Shows DE name and version
+        },
+        "wm",
+        "terminal",
+        "terminalfont",
+        {
+            "type": "cpu",
+            "showPeCores": true, // Displays all logical cores
+            "temp": false // Matches cpu_temp="off"
+        }
+    ]
+}
