@@ -192,12 +192,12 @@ vim.pack.add({
 	{ src = "https://www.github.com/lukas-reineke/indent-blankline.nvim" }, -- version = "v2.20.8"
 	{ src = "https://www.github.com/folke/which-key.nvim" },
 	{ src = "https://www.github.com/sphamba/smear-cursor.nvim" },
-	-- { src = "https://www.github.com/folke/flash.nvim" },
+	{ src = "https://www.github.com/folke/flash.nvim" },
 	{ src = "https://www.github.com/stevearc/oil.nvim" },
 	{ src = "https://www.github.com/mrjones2014/smart-splits.nvim" },
 	{ src = "https://www.github.com/declancm/maximize.nvim" },
 	{ src = "https://www.github.com/kylechui/nvim-surround" },
-	-- { src = "https://www.github.com/barrettruth/preview.nvim" }, -- optional preview plugin if i ever use latex again
+	{ src = "https://www.github.com/barrettruth/preview.nvim" },
 	{ src = "https://www.github.com/ibhagwan/fzf-lua" },
 	{ src = "https://www.github.com/stevearc/conform.nvim" },
 	{
