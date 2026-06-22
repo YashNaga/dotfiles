@@ -24,19 +24,6 @@ vim.opt.splitright = true
 vim.opt.undofile = true
 vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undodir"
 
-local is_wsl = (function()
-	local output = vim.fn.systemlist("uname -a")[1]
-	return output and output:lower():find("microsoft") ~= nil
-end)()
-
-if is_wsl then
-	vim.g.clipboard = {
-		name = "WslClipboard",
-		copy = { ["+"] = "clip.exe", ["*"] = "clip.exe" },
-		paste = { ["+"] = "powershell.exe -c [Console]::Out.Write($(Get-Clipboard))", ["*"] = "powershell.exe -c [Console]::Out.Write($(Get-Clipboard))" },
-		cache_enabled = 0,
-	}
-end
 vim.opt.clipboard = "unnamedplus"
 
 vim.opt.signcolumn = "yes" -- Experiment for LSP signs and gitsigns
