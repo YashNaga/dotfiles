@@ -30,13 +30,15 @@ vim.opt.signcolumn = "yes" -- Experiment for LSP signs and gitsigns
 vim.opt.relativenumber = false
 vim.opt.number = true -- Constantly switching trying diff combos of these two
 
+vim.g["pencil#wrapModeDefault"] = "soft"
+
 -- Keybinds
 
 local defaultOpts = { noremap = true, silent = true }
 local termOpts = { silent = true }
 
 vim.keymap.set("n", "<leader>pu", function()
-	vim.pack.update()
+	vim.pack.update(nil, { force = true })
 end, { desc = "Run vim.pack.update()" })
 
 vim.keymap.set("n", "n", "nzzzv", defaultOpts)
@@ -104,6 +106,12 @@ end, { desc = "Restart Neovim" })
 
 vim.keymap.set("n", "<leader>H", "<cmd>help!<cr>", { desc = "Show help page for whats under cursor" })
 
+vim.keymap.set({ "n", "x", "o" }, "s", "<cmd>lua require('flash').jump()<cr>", { desc = "Flash" })
+vim.keymap.set({ "n", "x", "o" }, "S", "<cmd>lua require('flash').treesitter()<cr>", { desc = "Flash Treesitter" })
+vim.keymap.set("o", "r", "<cmd>lua require('flash').remote()<cr>", { desc = "Remote Flash" })
+vim.keymap.set({ "x", "o" }, "R", "<cmd>lua require('flash').treesitter_search()<cr>", { desc = "Treesitter Search" })
+vim.keymap.set("c", "<c-s>", "<cmd>lua require('flash').toggle()<cr>", { desc = "Toggle Flash Search" })
+
 vim.keymap.set("n", "<leader>ff", "<cmd>FzfLua files<cr>", { desc = "Search files" })
 vim.keymap.set("n", "<leader>fr", "<cmd>FzfLua resume<cr>", { desc = "Resume search" })
 vim.keymap.set("n", "<leader>fl", "<cmd>FzfLua live_grep<cr>", { desc = "Search by live grep" })
@@ -112,6 +120,13 @@ vim.keymap.set("n", "<leader>fh", "<cmd>FzfLua lgrep_curbuf<cr>", { desc = "Fuzz
 vim.keymap.set("n", "<leader>fb", "<cmd>FzfLua buffers<cr>", { desc = "Look at currently open buffers" })
 vim.keymap.set("n", "<leader>fG", "<cmd>FzfLua grep_cword<cr>", { desc = "Grep word under cursor" })
 vim.keymap.set("n", "<leader>fc", "<cmd>FzfLua files cwd='~/.config'<cr>", { desc = "Open fuzzy find in config dir" })
+
+vim.keymap.set("n", "<leader>mm", "<cmd>Markview<cr>", { desc = "Toggle Markview" })
+vim.keymap.set("n", "<leader>ms", "<cmd>Markview splitToggle<cr>", { desc = "Toggle Markview splitview" })
+
+vim.keymap.set("n", "<leader>gs", "<cmd>Git<cr>", { desc = "Open Git status dashboard" })
+vim.keymap.set("n", "<leader>gd", "<cmd>Gdiffsplit<cr>", { desc = "Open diff split" })
+vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Run git blame" })
 
 -- Autocommands
 
@@ -149,23 +164,6 @@ vim.api.nvim_create_autocmd("VimResized", {
 	command = "wincmd =",
 })
 
--- Specific settings and keymaps for .txt and .md files
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = { "text", "markdown", "gitcommit" },
-	callback = function(ev)
-		vim.opt_local.wrap = true
-		vim.opt_local.breakindent = true
-		vim.opt_local.linebreak = true
-		vim.opt_local.textwidth = 80
-
-		local opts = { buffer = ev.buf, silent = true }
-
-		-- Remap j/k to move by visual line instead of physical line
-		vim.keymap.set("n", "j", "gj", opts)
-		vim.keymap.set("n", "k", "gk", opts)
-	end,
-})
-
 -- Enter Insert Mode every time you enter a terminal, comment out if its too annoying
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "TermOpen" }, {
 	group = vim.api.nvim_create_augroup("terminal_insert", { clear = true }),
@@ -176,13 +174,35 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "TermOpen" }, {
 	end,
 })
 
+-- For regular text-writing and note-taking
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("text_writing", { clear = true }),
+    pattern = { "markdown", "text", "plaintext", "gitcommit" },
+    callback = function()
+        vim.opt_local.number = false
+        vim.opt_local.relativenumber = false
+			
+        vim.opt_local.breakindent = true -- idk actually know what these two do so feel free to comment them out if you dont like it
+        vim.opt_local.linebreak = true
+			
+        vim.opt_local.signcolumn = "no"
+        vim.opt_local.spell = true
+        vim.opt_local.spelllang = "en_au"
+			
+        vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
+        vim.keymap.set("n", "k", "gk", { buffer = true, silent = true })
+			
+        vim.cmd("call pencil#init()")
+    end,
+})
+
 -- Plugins
 
 -- plugin wish list: multicursors natively in 0.13 please
 
 require("vim._core.ui2").enable({ enable = true }) -- if your ui is bugging comment this line out (g< enters the pager as a buffer) Will be default in 0.13
 vim.cmd("packadd nvim.undotree")
-vim.cmd("packadd nvim.difftool")
+vim.cmd("packadd nvim.difftool") -- :DiffTool, js like diff in cmd without needing to be in a git repo like :G difftool
 vim.cmd("packadd nohlsearch")
 vim.pack.add({
 	{ src = "https://www.github.com/rebelot/kanagawa.nvim" },
@@ -190,14 +210,17 @@ vim.pack.add({
 	{ src = "https://www.github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://www.github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	{ src = "https://www.github.com/lukas-reineke/indent-blankline.nvim" }, -- version = "v2.20.8"
-	{ src = "https://www.github.com/folke/which-key.nvim" },
+    { src = "https://www.github.com/folke/which-key.nvim" }, -- Removable when you've learnt your keybinds
 	{ src = "https://www.github.com/sphamba/smear-cursor.nvim" },
 	{ src = "https://www.github.com/folke/flash.nvim" },
 	{ src = "https://www.github.com/stevearc/oil.nvim" },
+	{ src = "https://www.github.com/tpope/vim-fugitive" },
+    { src = "https://www.github.com/rbong/vim-flog" },
 	{ src = "https://www.github.com/mrjones2014/smart-splits.nvim" },
 	{ src = "https://www.github.com/declancm/maximize.nvim" },
 	{ src = "https://www.github.com/kylechui/nvim-surround" },
-	{ src = "https://www.github.com/barrettruth/preview.nvim" },
+    { src = "https://www.github.com/preservim/vim-pencil" },
+    { src = "https://www.github.com/OXY2DEV/markview.nvim" },
 	{ src = "https://www.github.com/ibhagwan/fzf-lua" },
 	{ src = "https://www.github.com/stevearc/conform.nvim" },
 	{
@@ -238,21 +261,22 @@ require("kanagawa").setup({
 require("nvim-web-devicons").setup()
 
 local ensureInstalled = {
-	"c",
-	"lua",
-	"vim",
-	"cpp",
-	"cmake",
-	"java",
-	"json",
-	"make",
-	"markdown",
-	"matlab",
-	"python",
-	"regex",
-	"rust",
-	"sql",
-	"toml",
+    "c",
+    "make",
+    "cpp",
+    "cmake",
+    "vim",
+    "lua",
+    "java",
+    "json",
+    "markdown",
+    "matlab",
+    "python",
+    "regex",
+    "rust",
+    "sql",
+    "toml",
+    "asm",
 }
 local alreadyInstalled = require("nvim-treesitter.config").get_installed()
 local parsersToInstall = vim.iter(ensureInstalled)
@@ -272,6 +296,7 @@ require("lualine").setup({
 		section_separators = { left = "", right = "" }, -- section_separators = { left = "", right = "" },
 		component_separators = { left = "", right = "" }, -- component_separators = { left = "", right = "" },
 		icons_enabled = false, -- icons_enabled = true,
+		globalstatus = true,
 	},
 	sections = {
 		lualine_a = { "mode" },
@@ -312,7 +337,16 @@ require("ibl").setup({
 	scope = { enabled = false },
 })
 
-require("smear_cursor").setup()
+require("smear_cursor").setup({
+    stiffness = 0.8,
+    trailing_stiffness = 0.6,
+    stiffness_insert_mode = 0.7,
+    trailing_stiffness_insert_mode = 0.7,
+    damping = 0.85,
+    damping_insert_mode = 0.85,
+    distance_stop_animating = 0.5,
+})
+
 require("oil").setup({
 	delete_to_trash = true,
 	skip_confirm_for_simple_edits = true,
@@ -331,6 +365,8 @@ require("smart-splits").setup()
 require("maximize").setup()
 require("nvim-surround").setup()
 
+require("flash").setup({})
+
 require("fzf-lua").setup({
 	{ "borderless-full" },
 	winopts = {
@@ -343,45 +379,6 @@ require("fzf-lua").setup({
 		include_current_sessions = true,
 	},
 	fzf_colors = true,
-})
-
--- Formatting
-require("conform").setup({
-	formatters_by_ft = {
-		markdown = { "prettier" },
-		c = { "clang_format" }, -- Took me two days to figure out its clang_format not clang-format
-		cpp = { "clang_format" },
-		lua = { "stylua" },
-	},
-	default_format_opts = {
-		lsp_format = "never",
-	},
-	format_on_save = {
-		lsp_format = "never",
-		async = false,
-		timeout_ms = 1000,
-	},
-	formatters = {
-		prettier = {
-			args = {
-				"--tab-width",
-				"4",
-			},
-		},
-		stylua = {
-			prepend_args = {
-				"--column-width",
-				"160",
-			},
-		},
-		clang_format = {
-			prepend_args = {
-				-- Acts as a global .clang-format file
-				"--style={BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Always, SpaceAfterControlStatementKeyword: false, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, IndentAccessModifiers: true, AccessModifierOffset: -1, ColumnLimit: 120, PointerAlignment: Right, DerivePointerAlignment: false}",
-				"--Wno-error=unknown",
-			},
-		},
-	},
 })
 
 require("blink.cmp").setup({
@@ -449,6 +446,12 @@ local lspConfigs = {
 			client.server_capabilities.documentRangeFormattingProvider = false
 		end,
 	},
+
+	asm_lsp = {
+        filetypes = { "asm", "s", "S" },
+        single_file_support = true,
+        settings = {},
+    },
 }
 
 -- Lsp and tool installer
@@ -469,14 +472,17 @@ local capabilities = blink_cmp.get_lsp_capabilities()
 
 require("mason-lspconfig").setup({
 	ensure_installed = {
-		"lua_ls",
-		"basedpyright",
-		"clangd",
-		"cmake",
-		"jdtls",
-		"tinymist",
+        "lua_ls",
+        "basedpyright",
+        "clangd",
+        "neocmake",
+        "jdtls", -- I hate java
+        "prettier",
+        "tinymist",
+        "asm_lsp",
 	},
 	automatic_installation = true,
+	auto_update = false,
 	handlers = {
 		function(server_name)
 			local server = lspConfigs[server_name] or {}
@@ -527,26 +533,26 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 
 		opts.desc = "Smart rename"
-		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
+		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts) -- smart rename
 
 		opts.desc = "Toggle diagnostics"
-		vim.keymap.set("n", "<leader>td", function()
+		vim.keymap.set("n", "<leader>lt", function()
 			vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 		end, opts)
 
 		opts.desc = "Show buffer diagnostics"
-		vim.keymap.set("n", "<leader>D", "<cmd>FzfLua diagnostics_document<CR>", opts) -- show  diagnostics for file
+		vim.keymap.set("n", "<leader>lb", "<cmd>FzfLua diagnostics_document<CR>", opts) -- show  diagnostics for file
 
 		opts.desc = "Show line diagnostics"
-		vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+		vim.keymap.set("n", "<leader>ll", vim.diagnostic.open_float, opts) -- show diagnostics for line
 
 		opts.desc = "Go to previous diagnostic"
-		vim.keymap.set("n", "[d", function()
+		vim.keymap.set("n", "<leader>lp", function()
 			vim.diagnostic.jump({ count = -1, float = true })
 		end, opts) -- jump to previous diagnostic in buffer
 		--
 		opts.desc = "Go to next diagnostic"
-		vim.keymap.set("n", "]d", function()
+		vim.keymap.set("n", "<leader>ln", function()
 			vim.diagnostic.jump({ count = 1, float = true })
 		end, opts) -- jump to next diagnostic in buffer
 
@@ -556,14 +562,54 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.diagnostic.config({
-	severity_sort = true,
-	float = { border = "rounded", source = "if_many" },
-	underline = { severity = vim.diagnostic.severity.ERROR },
-	signs = false,
-	virtual_text = {
-		source = "if_many",
-		spacing = 2,
-	},
+    severity_sort = true,
+    float = { border = "rounded", source = "if_many" },
+    underline = { severity = vim.diagnostic.severity.ERROR },
+    signs = true,
+    virtual_text = false,
+    -- virtual_text = {
+    --  source = "if_many",
+    --  spacing = 2,
+    -- },
+})
+
+-- Formatting
+require("conform").setup({
+    formatters_by_ft = {
+        markdown = {}, -- markdown = { "prettier" },
+        c = { "clang_format" }, -- Took me two days to figure out its clang_format not clang-format
+        cpp = { "clang_format" },
+        lua = { "stylua" },
+    },
+    default_format_opts = {
+        lsp_format = "never",
+    },
+    format_on_save = {
+        lsp_format = "never",
+        async = false,
+        timeout_ms = 1000,
+    },
+    formatters = {
+        prettier = {
+            args = {
+                "--tab-width",
+                "4",
+            },
+        },
+        stylua = {
+            prepend_args = {
+                "--column-width",
+                "160",
+            },
+        },
+        clang_format = {
+            prepend_args = {
+                -- Acts as a global .clang-format file
+                "--style={BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Always, SpaceAfterControlStatementKeyword: false, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, IndentAccessModifiers: true, AccessModifierOffset: -1, ColumnLimit: 120, PointerAlignment: Right, DerivePointerAlignment: false}",
+                "--Wno-error=unknown",
+            },
+        },
+    },
 })
 
 vim.cmd("colorscheme kanagawa")
