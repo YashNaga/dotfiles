@@ -7,7 +7,6 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = false
 vim.opt.wrap = false
-vim.opt.mouse = "a"
 vim.opt.smartcase = true
 vim.opt.ignorecase = true
 vim.g.loaded_netrw = 1
@@ -15,22 +14,18 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 vim.opt.backup = false
 vim.opt.writebackup = true
-vim.opt.incsearch = true
-vim.opt.autoread = true
 vim.opt.autochdir = false
 vim.opt.selection = "inclusive"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.undofile = true
-vim.opt.undodir = os.getenv("HOME") .. "/.cache/nvim/undodir"
+vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 
 vim.opt.clipboard = "unnamedplus"
 
 vim.opt.signcolumn = "yes" -- Experiment for LSP signs and gitsigns
 vim.opt.relativenumber = false
 vim.opt.number = true -- Constantly switching trying diff combos of these two
-
-vim.g["pencil#wrapModeDefault"] = "soft"
 
 -- Keybinds
 
@@ -40,6 +35,12 @@ local termOpts = { silent = true }
 vim.keymap.set("n", "<leader>pu", function()
 	vim.pack.update(nil, { force = true })
 end, { desc = "Run vim.pack.update()" })
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", defaultOpts)
+vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv", defaultOpts)
+
+vim.keymap.set("v", ">", ">gv", defaultOpts)
+vim.keymap.set("v", "<", "<gv", defaultOpts)
 
 vim.keymap.set("n", "n", "nzzzv", defaultOpts)
 vim.keymap.set("n", "N", "Nzzzv", defaultOpts)
@@ -56,13 +57,13 @@ vim.keymap.set("n", "J", ":lua require('smart-splits').resize_down()<cr>", defau
 vim.keymap.set("n", "K", ":lua require('smart-splits').resize_up()<cr>", defaultOpts)
 vim.keymap.set("n", "L", ":lua require('smart-splits').resize_right()<cr>", defaultOpts)
 
-vim.keymap.set("n", "<leader>z", ":lua require('maximize').toggle()<cr>", { desc = "Toggle zooming on buffer/split", noremap = true, silent = true })
+vim.keymap.set("n", "<leader>z", ":tab split<cr>", { desc = "Move split into standalone tab", noremap = true, silent = true })
 
 -- Navigate terminal splits like regular splits
 vim.keymap.set("t", "<C-h>", "<C-\\><C-N><C-w>h", termOpts)
 vim.keymap.set("t", "<C-j>", "<C-\\><C-N><C-w>j", termOpts)
 vim.keymap.set("t", "<C-k>", "<C-\\><C-N><C-w>k", termOpts)
-vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l", defaultOpts)
+vim.keymap.set("t", "<C-l>", "<C-\\><C-N><C-w>l", termOpts)
 vim.keymap.set("t", "<esc>", "<C-\\><C-n>", defaultOpts)
 
 vim.keymap.set("n", "<leader>th", ":vertical leftabove term<cr>", { desc = "Create terminal to the left", silent = true })
@@ -70,44 +71,15 @@ vim.keymap.set("n", "<leader>tj", ":below term<cr>", { desc = "Create terminal b
 vim.keymap.set("n", "<leader>tk", ":leftabove term<cr>", { desc = "Create terminal above", silent = true })
 vim.keymap.set("n", "<leader>tl", ":vertical belowright term<cr>", { desc = "Create terminal to the right", silent = true })
 
--- Make sure to disable Mission control shortcuts in keyboard shortcuts on mac to make arrow keys work
-vim.keymap.set("n", "<C-Right>", ":bnext<cr>", defaultOpts)
-vim.keymap.set("n", "<C-Left>", ":bprevious<cr>", defaultOpts)
-vim.keymap.set("n", "<C-Down>", ":hide<cr>", defaultOpts) -- Hide current buffer
-vim.keymap.set("n", "<C-Up>", ":ls<cr>", defaultOpts)
-
-vim.keymap.set("n", "<leader>bd", ":bd<cr>", { desc = "Delete current buffer", noremap = true, silent = true })
-
 vim.keymap.set("n", "<leader>sh", "<C-w>s<C-w>H", { desc = "Create split to the left", silent = true })
 vim.keymap.set("n", "<leader>sj", "<C-w>s", { desc = "Create split below", silent = true })
 vim.keymap.set("n", "<leader>sk", "<C-w>s<C-w>K", { desc = "Create split above", silent = true })
 vim.keymap.set("n", "<leader>sl", "<C-w>v", { desc = "Create split to the right", silent = true })
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", defaultOpts)
-vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv", defaultOpts)
-
-vim.keymap.set("v", ">", ">gv", defaultOpts)
-vim.keymap.set("v", "<", "<gv", defaultOpts)
-
 vim.keymap.set("n", "-", "<cmd>Oil --float<cr>", { desc = "Opens Oil in floating window" })
-
-vim.keymap.set("n", "<leader>U", function()
-	require("undotree").open({
-		command = "belowright " .. math.floor(vim.api.nvim_win_get_width(0) / 3) .. "vnew", -- makes undotree take up a third of the screen
-	})
-end, { desc = "[U]ndotree toggle" })
-
--- Restart keybinding that preserves session, may be done natively in the future
-vim.keymap.set("n", "<leader>R", function()
-	local session = vim.fn.stdpath("state") .. "/restart_session.vim"
-	vim.cmd("mksession! " .. vim.fn.fnameescape(session))
-	vim.cmd("restart source " .. vim.fn.fnameescape(session))
-end, { desc = "Restart Neovim" })
 
 vim.keymap.set("n", "<leader>H", "<cmd>help!<cr>", { desc = "Show help page for whats under cursor" })
 
-vim.keymap.set({ "n", "x", "o" }, "s", "<cmd>lua require('flash').jump()<cr>", { desc = "Flash" })
-vim.keymap.set({ "n", "x", "o" }, "S", "<cmd>lua require('flash').treesitter()<cr>", { desc = "Flash Treesitter" })
 vim.keymap.set("o", "r", "<cmd>lua require('flash').remote()<cr>", { desc = "Remote Flash" })
 vim.keymap.set({ "x", "o" }, "R", "<cmd>lua require('flash').treesitter_search()<cr>", { desc = "Treesitter Search" })
 vim.keymap.set("c", "<c-s>", "<cmd>lua require('flash').toggle()<cr>", { desc = "Toggle Flash Search" })
@@ -146,14 +118,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
 		vim.hl.on_yank({
 			higroup = "IncSearch",
-			timeout = 40,
+			timeout = 150,
 		})
 	end,
 })
 
 -- no auto continue comments on new line
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("no_auto_comment", {}),
+	group = vim.api.nvim_create_augroup("no_auto_comment", { clear = true }),
 	callback = function()
 		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
 	end,
@@ -165,7 +137,7 @@ vim.api.nvim_create_autocmd("VimResized", {
 })
 
 -- Enter Insert Mode every time you enter a terminal, comment out if its too annoying
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "TermOpen" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
 	group = vim.api.nvim_create_augroup("terminal_insert", { clear = true }),
 	callback = function()
 		if vim.bo.buftype == "terminal" then
@@ -176,33 +148,28 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "TermOpen" }, {
 
 -- For regular text-writing and note-taking
 vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup("text_writing", { clear = true }),
-    pattern = { "markdown", "text", "plaintext", "gitcommit" },
-    callback = function()
-        vim.opt_local.number = false
-        vim.opt_local.relativenumber = false
-			
-        vim.opt_local.breakindent = true -- idk actually know what these two do so feel free to comment them out if you dont like it
-        vim.opt_local.linebreak = true
-			
-        vim.opt_local.signcolumn = "no"
-        vim.opt_local.spell = true
-        vim.opt_local.spelllang = "en_au"
-			
-        vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
-        vim.keymap.set("n", "k", "gk", { buffer = true, silent = true })
-			
-        vim.cmd("call pencil#init()")
-    end,
+	group = vim.api.nvim_create_augroup("text_writing", { clear = true }),
+	pattern = { "markdown", "text", "plaintext", "gitcommit" },
+	callback = function()
+		vim.opt_local.number = false
+		vim.opt_local.relativenumber = false
+
+		vim.opt_local.breakindent = true -- idk actually know what these two do so feel free to comment them out if you dont like it
+		vim.opt_local.linebreak = true
+		vim.opt_local.wrap = true
+
+		vim.opt_local.signcolumn = "no"
+		vim.opt_local.spell = true
+		vim.opt_local.spelllang = "en_au"
+
+		vim.keymap.set("n", "j", "gj", { buffer = true, silent = true })
+		vim.keymap.set("n", "k", "gk", { buffer = true, silent = true })
+	end,
 })
 
 -- Plugins
 
--- plugin wish list: multicursors natively in 0.13 please
-
-require("vim._core.ui2").enable({ enable = true }) -- if your ui is bugging comment this line out (g< enters the pager as a buffer) Will be default in 0.13
-vim.cmd("packadd nvim.undotree")
-vim.cmd("packadd nvim.difftool") -- :DiffTool, js like diff in cmd without needing to be in a git repo like :G difftool
+require("vim._core.ui2").enable({ enable = true })
 vim.cmd("packadd nohlsearch")
 vim.pack.add({
 	{ src = "https://www.github.com/rebelot/kanagawa.nvim" },
@@ -210,17 +177,14 @@ vim.pack.add({
 	{ src = "https://www.github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://www.github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	{ src = "https://www.github.com/lukas-reineke/indent-blankline.nvim" }, -- version = "v2.20.8"
-    { src = "https://www.github.com/folke/which-key.nvim" }, -- Removable when you've learnt your keybinds
+	{ src = "https://www.github.com/folke/which-key.nvim" }, -- Removable when you've learnt your keybinds
 	{ src = "https://www.github.com/sphamba/smear-cursor.nvim" },
 	{ src = "https://www.github.com/folke/flash.nvim" },
 	{ src = "https://www.github.com/stevearc/oil.nvim" },
 	{ src = "https://www.github.com/tpope/vim-fugitive" },
-    { src = "https://www.github.com/rbong/vim-flog" },
 	{ src = "https://www.github.com/mrjones2014/smart-splits.nvim" },
-	{ src = "https://www.github.com/declancm/maximize.nvim" },
 	{ src = "https://www.github.com/kylechui/nvim-surround" },
-    { src = "https://www.github.com/preservim/vim-pencil" },
-    { src = "https://www.github.com/OXY2DEV/markview.nvim" },
+	{ src = "https://www.github.com/OXY2DEV/markview.nvim" },
 	{ src = "https://www.github.com/ibhagwan/fzf-lua" },
 	{ src = "https://www.github.com/stevearc/conform.nvim" },
 	{
@@ -261,22 +225,22 @@ require("kanagawa").setup({
 require("nvim-web-devicons").setup()
 
 local ensureInstalled = {
-    "c",
-    "make",
-    "cpp",
-    "cmake",
-    "vim",
-    "lua",
-    "java",
-    "json",
-    "markdown",
-    "matlab",
-    "python",
-    "regex",
-    "rust",
-    "sql",
-    "toml",
-    "asm",
+	"c",
+	"make",
+	"cpp",
+	"cmake",
+	"vim",
+	"lua",
+	"java",
+	"json",
+	"markdown",
+	"matlab",
+	"python",
+	"regex",
+	"rust",
+	"sql",
+	"toml",
+	"asm",
 }
 local alreadyInstalled = require("nvim-treesitter.config").get_installed()
 local parsersToInstall = vim.iter(ensureInstalled)
@@ -285,10 +249,6 @@ local parsersToInstall = vim.iter(ensureInstalled)
 	end)
 	:totable()
 require("nvim-treesitter").install(parsersToInstall)
-
-local function maximize_status()
-	return vim.t.maximized and "   " or ""
-end
 
 require("lualine").setup({
 	options = {
@@ -302,7 +262,7 @@ require("lualine").setup({
 		lualine_a = { "mode" },
 		lualine_b = { { "branch" }, { "filename", color = { bg = "#2a2a37" } } }, -- color = { bg = "#2a2a37" } } },
 		lualine_c = {},
-		lualine_x = { maximize_status }, -- lualine_x = {"encoding", "fileformat", "filetype"},
+		lualine_x = {}, -- lualine_x = {"encoding", "fileformat", "filetype"},
 		lualine_y = { { "location" } }, -- color = { bg = "2a2a37" } } },
 		lualine_z = { "filetype" },
 	},
@@ -338,13 +298,13 @@ require("ibl").setup({
 })
 
 require("smear_cursor").setup({
-    stiffness = 0.8,
-    trailing_stiffness = 0.6,
-    stiffness_insert_mode = 0.7,
-    trailing_stiffness_insert_mode = 0.7,
-    damping = 0.85,
-    damping_insert_mode = 0.85,
-    distance_stop_animating = 0.5,
+	stiffness = 0.8,
+	trailing_stiffness = 0.6,
+	stiffness_insert_mode = 0.7,
+	trailing_stiffness_insert_mode = 0.7,
+	damping = 0.85,
+	damping_insert_mode = 0.85,
+	distance_stop_animating = 0.5,
 })
 
 require("oil").setup({
@@ -362,10 +322,16 @@ require("oil").setup({
 })
 
 require("smart-splits").setup()
-require("maximize").setup()
 require("nvim-surround").setup()
 
-require("flash").setup({})
+require("flash").setup({
+	modes = {
+		char = {
+			enabled = true,
+			jump_labels = true,
+		},
+	},
+})
 
 require("fzf-lua").setup({
 	{ "borderless-full" },
@@ -448,10 +414,10 @@ local lspConfigs = {
 	},
 
 	asm_lsp = {
-        filetypes = { "asm", "s", "S" },
-        single_file_support = true,
-        settings = {},
-    },
+		filetypes = { "asm", "s", "S" },
+		single_file_support = true,
+		settings = {},
+	},
 }
 
 -- Lsp and tool installer
@@ -472,14 +438,13 @@ local capabilities = blink_cmp.get_lsp_capabilities()
 
 require("mason-lspconfig").setup({
 	ensure_installed = {
-        "lua_ls",
-        "basedpyright",
-        "clangd",
-        "neocmake",
-        "jdtls", -- I hate java
-        "prettier",
-        "tinymist",
-        "asm_lsp",
+		"lua_ls",
+		"basedpyright",
+		"clangd",
+		"neocmake",
+		"jdtls", -- I hate java
+		"tinymist",
+		"asm_lsp",
 	},
 	automatic_installation = true,
 	auto_update = false,
@@ -508,108 +473,120 @@ require("mason-tool-installer").setup({
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
-		-- Buffer local mappings.
-		-- See `:help vim.lsp.*` for documentation on any of the below functions
-		local opts = { buffer = ev.buf, silent = true }
+		local function make_opts(desc)
+			return { buffer = ev.buf, silent = true, desc = desc }
+		end
+
+		local fzf = require("fzf-lua")
 
 		-- set keybinds
 		-- might need to add desc so whichkey can see it
-		opts.desc = "Show LSP references"
-		vim.keymap.set("n", "gR", "<cmd>FzfLua lsp_references<CR>", opts) -- show definition, references
+		vim.keymap.set("n", "gR", function()
+			fzf.lsp_references({ jump1 = true })
+		end, make_opts("Show LSP references")) -- show definition, references
 
-		opts.desc = "Go to declaration"
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, make_opts("Go to declaration")) -- go to declaration
 
-		opts.desc = "Show LSP definition"
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- show lsp definition
+		vim.keymap.set("n", "gd", function()
+			fzf.lsp_definitions({ jump1 = true })
+		end, make_opts("Show LSP definitons"))
 
-		opts.desc = "Show LSP implementations"
-		vim.keymap.set("n", "gi", "<cmd>FzfLua lsp_implementations<CR>", opts) -- show lsp implementations
+		vim.keymap.set("n", "gi", function()
+			fzf.lsp_implementations({ jump1 = true })
+		end, make_opts("Show LSP implementations"))
 
-		opts.desc = "Show LSP type definitions"
-		vim.keymap.set("n", "gt", "<cmd>FzfLua lsp_typedefs<CR>", opts) -- show lsp type definitions
+		vim.keymap.set("n", "gt", function()
+			fzf.lsp_typedefs({ jump1 = true })
+		end, make_opts("Show LSP type definitions"))
 
-		opts.desc = "See available code actions"
-		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+		vim.keymap.set({ "n", "v" }, "<leader>ca", function()
+			fzf.lsp_code_actions()
+		end, make_opts("See available code actions"))
 
-		opts.desc = "Smart rename"
-		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts) -- smart rename
+		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, make_opts("Smart rename")) -- smart rename
 
-		opts.desc = "Toggle diagnostics"
 		vim.keymap.set("n", "<leader>lt", function()
 			vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-		end, opts)
+		end, make_opts("Toggle diagnostics"))
 
-		opts.desc = "Show buffer diagnostics"
-		vim.keymap.set("n", "<leader>lb", "<cmd>FzfLua diagnostics_document<CR>", opts) -- show  diagnostics for file
+		vim.keymap.set("n", "<leader>lb", function()
+			fzf.diagnostics_document()
+		end, make_opts("Show buffer diagnostics"))
 
-		opts.desc = "Show line diagnostics"
-		vim.keymap.set("n", "<leader>ll", vim.diagnostic.open_float, opts) -- show diagnostics for line
+		vim.keymap.set("n", "<leader>ll", vim.diagnostic.open_float, make_opts("Show line diagnostics"))
 
-		opts.desc = "Go to previous diagnostic"
 		vim.keymap.set("n", "<leader>lp", function()
 			vim.diagnostic.jump({ count = -1, float = true })
-		end, opts) -- jump to previous diagnostic in buffer
-		--
-		opts.desc = "Go to next diagnostic"
+		end, make_opts("Go to previous diagnostic"))
+
 		vim.keymap.set("n", "<leader>ln", function()
 			vim.diagnostic.jump({ count = 1, float = true })
-		end, opts) -- jump to next diagnostic in buffer
+		end, make_opts("Go to next diagnostic"))
 
-		opts.desc = "Show documentation for what is under cursor"
-		vim.keymap.set("n", "D", vim.lsp.buf.hover, opts) -- Double press D to enter hover as buffer
+		vim.keymap.set("n", "D", vim.lsp.buf.hover, make_opts("Show documentation for whats under cursor")) -- Double press D to enter hover as buffer
 	end,
 })
 
 vim.diagnostic.config({
-    severity_sort = true,
-    float = { border = "rounded", source = "if_many" },
-    underline = { severity = vim.diagnostic.severity.ERROR },
-    signs = true,
-    virtual_text = false,
-    -- virtual_text = {
-    --  source = "if_many",
-    --  spacing = 2,
-    -- },
+	severity_sort = true,
+	float = { border = "rounded", source = "if_many" },
+	underline = { severity = vim.diagnostic.severity.ERROR },
+	signs = true,
+	virtual_text = false,
+	-- virtual_text = {
+	-- 	source = "if_many",
+	-- 	spacing = 2,
+	-- },
 })
 
 -- Formatting
 require("conform").setup({
-    formatters_by_ft = {
-        markdown = {}, -- markdown = { "prettier" },
-        c = { "clang_format" }, -- Took me two days to figure out its clang_format not clang-format
-        cpp = { "clang_format" },
-        lua = { "stylua" },
-    },
-    default_format_opts = {
-        lsp_format = "never",
-    },
-    format_on_save = {
-        lsp_format = "never",
-        async = false,
-        timeout_ms = 1000,
-    },
-    formatters = {
-        prettier = {
-            args = {
-                "--tab-width",
-                "4",
-            },
-        },
-        stylua = {
-            prepend_args = {
-                "--column-width",
-                "160",
-            },
-        },
-        clang_format = {
-            prepend_args = {
-                -- Acts as a global .clang-format file
-                "--style={BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Always, SpaceAfterControlStatementKeyword: false, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, IndentAccessModifiers: true, AccessModifierOffset: -1, ColumnLimit: 120, PointerAlignment: Right, DerivePointerAlignment: false}",
-                "--Wno-error=unknown",
-            },
-        },
-    },
+	formatters_by_ft = {
+		markdown = {}, -- markdown = { "prettier" },
+		c = { "clang_format" }, -- Took me two days to figure out its clang_format not clang-format
+		cpp = { "clang_format" },
+		lua = { "stylua" },
+	},
+	default_format_opts = {
+		lsp_format = "never",
+	},
+	format_on_save = {
+		lsp_format = "never",
+		async = false,
+		timeout_ms = 1000,
+	},
+	formatters = {
+		prettier = {
+			args = {
+				"--tab-width",
+				"4",
+			},
+		},
+		stylua = {
+			prepend_args = {
+				"--column-width",
+				"160",
+			},
+		},
+		clang_format = {
+			-- Acts as a global .clang-format file
+			prepend_args = function(self, ctx)
+				local style_str = ""
+
+				if vim.bo[ctx.buf].filetype == "c" then
+					style_str =
+						"--style={BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Always, SpaceAfterControlStatementKeyword: false, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, AllowShortIfStatementsOnASingleLine: false, AllowShortBlocksOnASingleLine: false, IndentAccessModifiers: true, AccessModifierOffset: -1, ColumnLimit: 120, PointerAlignment: Right, DerivePointerAlignment: false}"
+				else
+					style_str = "--style=Google"
+				end
+
+				return {
+					style_str,
+					"--Wno-error=unknown",
+				}
+			end,
+		},
+	},
 })
 
 vim.cmd("colorscheme kanagawa")
