@@ -172,7 +172,8 @@ vim.api.nvim_create_autocmd("FileType", {
 require("vim._core.ui2").enable({ enable = true })
 vim.cmd("packadd nohlsearch")
 vim.pack.add({
-	{ src = "https://www.github.com/rebelot/kanagawa.nvim" },
+	-- { src = "https://www.github.com/rebelot/kanagawa.nvim" },
+	{ src = "https://www.github.com/YashNaga/jojolion.nvim" },
 	{ src = "https://www.github.com/nvim-lualine/lualine.nvim" },
 	{ src = "https://www.github.com/nvim-tree/nvim-web-devicons" },
 	{ src = "https://www.github.com/nvim-treesitter/nvim-treesitter", version = "main" },
@@ -197,30 +198,7 @@ vim.pack.add({
 	{ src = "https://www.github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
 })
 
-require("kanagawa").setup({
-	theme = "wave",
-	-- remove gutter background
-	colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
-	overrides = function(colors)
-		local theme = colors.theme
-		return {
-			-- transparent floating window
-			NormalFloat = { bg = "none" },
-			FloatBorder = { bg = "none" },
-			FloatTitle = { bg = "none" },
-
-			NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-			LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-			MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-
-			-- Dark completion (popup) menu
-			Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
-			PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-			PmenuSbar = { bg = theme.ui.bg_m1 },
-			PmenuThumb = { bg = theme.ui.bg_p2 },
-		}
-	end,
-})
+require("jojolion").setup()
 
 require("nvim-web-devicons").setup()
 
@@ -252,7 +230,7 @@ require("nvim-treesitter").install(parsersToInstall)
 
 require("lualine").setup({
 	options = {
-		theme = "kanagawa",
+		theme = require("jojolion.lualine"),
 		section_separators = { left = "", right = "" }, -- section_separators = { left = "", right = "" },
 		component_separators = { left = "", right = "" }, -- component_separators = { left = "", right = "" },
 		icons_enabled = false, -- icons_enabled = true,
@@ -260,7 +238,7 @@ require("lualine").setup({
 	},
 	sections = {
 		lualine_a = { "mode" },
-		lualine_b = { { "branch" }, { "filename", color = { bg = "#2a2a37" } } }, -- color = { bg = "#2a2a37" } } },
+		lualine_b = { { "branch" }, { "filename" } }, -- color = { bg = "#2a2a37" } } }, -- color = { bg = "#2a2a37" } } },
 		lualine_c = {},
 		lualine_x = {}, -- lualine_x = {"encoding", "fileformat", "filetype"},
 		lualine_y = { { "location" } }, -- color = { bg = "2a2a37" } } },
@@ -589,4 +567,4 @@ require("conform").setup({
 	},
 })
 
-vim.cmd("colorscheme kanagawa")
+vim.cmd("colorscheme jojolion")
